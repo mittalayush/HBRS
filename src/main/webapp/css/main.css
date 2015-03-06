@@ -1,4 +1,4 @@
-﻿
+
 /*************************
 *******Typography******
 **************************/
@@ -1566,7 +1566,7 @@ width:600px;
 }
 
 .breadcrumbs .breadcrumb > li + li:before {
-  content: " ";
+  content: "�";
 }
 
 #cart_items .cart_info {
@@ -2531,3 +2531,9 @@ width:600px;
 }
 
 
+#myselect { 
+width:533px; 
+} 
+#myselect option { 
+width:3300px; 
+}

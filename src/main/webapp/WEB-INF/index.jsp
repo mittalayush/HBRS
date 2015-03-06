@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -37,98 +38,115 @@
         margin:-400px 0 0 -400px;
 	}
     </style>
-    <script>
-		(function() {
-				window.onload = function() {
-						// Creating an object literal containing the properties
-						// we want to pass to the map
-						var options = {
-						zoom: 9,
-						center: new google.maps.LatLng(37.4292, -122.0819),
-						mapTypeId: google.maps.MapTypeId.ROADMAP
-						};
+	<script>
+		(function()
+		{
+			window.onload = function()
+			{
+				var lat;
+				var lng;
+				
+ 				<c:forEach var="q" items="${MapList}" begin="0" end="1">
+					lat = ${q.getLatitude()};
+					lng = ${q.getLongitude()};
+				</c:forEach>
+
+				// Creating an object literal containing the properties
+				// we want to pass to the map
+				var options = {
+								zoom: 15,
+								center: new google.maps.LatLng(lat,lng),
+								mapTypeId: google.maps.MapTypeId.ROADMAP
+							};
 				// Creating the map
 				var map = new google.maps.Map(document.getElementById('map-canvas'), options);
-				
-			var mkr = new google	.maps.Marker({
-    			position: map.getCenter(),
-     			map: map,
-    			 title: 'Click to zoom'
-			 });
 
-			google.maps.event.addListener(map, 'center_changed', function() {
-    			// 3 seconds after the center of the map has changed, pan back to the
-    			// marker.
-  			window.setTimeout(function() {
-  			map.panTo(mkr.getPosition());
-    			}, 3000);
-   			});
+				var mkr = new google.maps.Marker({
+//									position: map.getCenter(),
+									map: map,
+									title: 'Click to zoom'});
 
-
-					var places = [];
-					places.push(new google.maps.LatLng(37.777,-122.417));
-					places.push(new google.maps.LatLng(37.781,-122.418));
-					places.push(new google.maps.LatLng(37.774,-122.410));
-					places.push(new google.maps.LatLng(37.793,-122.398));
-					places.push(new google.maps.LatLng(37.787,-122.396));
-					places.push(new google.maps.LatLng(37.5542,-122.3131));
-					places.push(new google.maps.LatLng(37.6253,-122.4253));
-					places.push(new google.maps.LatLng(37.4828,-122.2361));
-					places.push(new google.maps.LatLng(37.4292,-122.1381));
-					places.push(new google.maps.LatLng(37.3894,-122.0819));
-					places.push(new google.maps.LatLng(37.394068,-122.079161));
-					places.push(new google.maps.LatLng(37.3711,-122.0375));
-
-					
-					
-					
-					
-					// Looping through the places array
-					
-					var events = [];
-					events.push("Chipotle, San Francisco");
-					events.push("Subway, San Frnacisco");
-					events.push("Chaat Bhavan, San Francisco");
-					events.push("Inchin-Bamboo, San Francisco");
-					events.push("Rainforest Cafe, San Frnacisco");
-					events.push("Taco Bell, San Bruno");
-					events.push("Sushi King, San Mateo");
-					events.push("Mambo Cakes, Redwood City");
-					events.push("Yard House, Plao Alto");
-					events.push("Greek Tavern, Mountain View");
-					events.push("Bikaner, Mountain View");
-					events.push("Sarvana Bhawan, Sunnyvale");
-					 var people= [];
-					 people.push(new google.maps.LatLng(37.336186,-121.883493));
-					 people.push(new google.maps.LatLng(37.332462,-121.885969));
-					 people.push(new google.maps.LatLng(37.336268,-121.887982));
-
-				for (var i = 0; i < places.length; i++) {
-				// Adding the marker as usual
-				var marker = new google.maps.Marker({
-				position: places[i],
-				map: map,
-				animation: google.maps.Animation.BOUNCE,
-				title: 'Location ' + i
-				
+				google.maps.event.addListener(map, 'center_changed', function()
+				{
+					// 3 seconds after the center of the map has changed, pan back to the
+					// marker.
+					window.setTimeout(function()
+					{
+						map.panTo(mkr.getPosition());
+					}, 3000);
 				});
-			
+
+				var places = [];
+				var rest_name = [];
+				var rest_address = [];
+				var rest_zip = [];
+				var rest_cuisine = [];
+				var rest_rating = [];
+				var rest_phone = [];
+				var rest_distance = [];
 				
+
+				<c:forEach var="q" items="${MapList}" begin="1">
+					places.push(new google.maps.LatLng(${q.getLatitude()},${q.getLongitude()}));
+
+					//Get Restaurant Details
+					rest_name.push("${q.getName()}");
+					rest_address.push("${q.getAddress()}");
+					rest_zip.push("${q.getZip()}");
+					rest_cuisine.push("${q.getCuisine()}");
+					rest_rating.push(${q.getRating()});
+					rest_phone.push("${q.getPhone()}");
+					rest_distance.push(${q.getDistance()});
+				</c:forEach>
+
+				for (var i = 0; i < places.length; i++)
+				{
+					var marker;
+					// Adding the marker as usual
+					if(i == 0)
+					{
+						marker = new google.maps.Marker({
+						position: places[i],
+						icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+						map: map,
+						animation: google.maps.Animation.BOUNCE,
+						title: 'Location ' + i});
+					}
+					else
+					{
+						marker = new google.maps.Marker({
+						position: places[i],
+						map: map,
+						title: 'Location ' + i});
+					}
+
 					// Wrapping the event listener inside an anonymous function
 					// that we immediately invoke and passes the variable i to.
-					(function(i, marker) {
-					// Creating the event listener. It now has access to the values of
-					// i and marker as they were during its creation
-					google.maps.event.addListener(marker, 'click', function() {
-					var infowindow = new google.maps.InfoWindow({
-					content: 'Restaurant ' + events[i]
-					});
-					infowindow.open(map, marker);
-					});
-			})(i, marker);
-			}
-				
-				for (var i = 0; i < people.length; i++) {
+					(function(i, marker)
+					{
+						// Creating the event listener. It now has access to the values of
+						// i and marker as they were during its creation
+						google.maps.event.addListener(marker, 'click', function() {
+						var infowindow = new google.maps.InfoWindow(
+						{
+							content: "<b>DETAILS</b>" +
+									"</br></br> <b>Name</b>: <i>"+rest_name[i] +
+									"</br></i><b>Address</b>: <i>"+rest_address[i] +
+									"</br></i><b>Zip</b>: <i>"+rest_zip[i] +
+									"</br></i><b>Cuisine</b>: <i>"+rest_cuisine[i] +
+									"</br></i><b>Rating</b>: <i>"+rest_rating[i] +
+									"</br></i><b>Distance</b>: <i>"+rest_distance[i] +
+									"</br></i></br><b>Phone</b>: <i>"+rest_phone[i],
+									
+							maxWidth : 700
+						});
+						infowindow.open(map, marker);
+						});
+					})(i, marker);
+				}
+
+				for (var i = 0; i < people.length; i++)
+				{
 					// Adding the marker as usual
 					var ppl = new google.maps.Marker({
 					position: people[i],
@@ -137,11 +155,11 @@
 					icon: 'person.gif',
 					animation: google.maps.Animation.DROP
 					});
-									}
-		}
-})();
+				}
+			}
+		})();
 
-    </script>
+	</script>
 	
 	
 	
@@ -155,14 +173,14 @@
 					<div class="col-sm-6">
 						<div class="contactinfo">
 							<ul class="nav nav-pills">
-								<li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-								<li><a href="#"><i class="fa fa-envelope"></i> info@healthybites.com</a></li>
+								<li><a href="#"><i class="fa fa-star"></i>Welcome, <%= session.getAttribute("fullname") %></a></li>
+								<li><a href="#"><i class="fa fa-star"></i>Last Logged-in: <i class="fa"></i> <%= session.getAttribute("last_login") %></a></li>
 							</ul>
 						</div>
 					</div>
 					<div class="col-sm-6">
 
-						</div>
+					</div>
 					</div>
 				</div>
 			</div>
@@ -173,7 +191,7 @@
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="logo pull-left">
-							<a href="index.html"><img src="images/home/logo.jpg" alt="" /></a>
+							<a href="${pageContext.request.contextPath}/Home"><img src="images/home/logo.jpg" alt="" /></a>
 						</div>
 						<div class="btn-group pull-right">
 							
@@ -181,10 +199,13 @@
 					</div>
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
-							<ul class="nav navbar-nav">
-								<li><a href="useraccount.html"><i class="fa fa-user"></i>User Account</a></li>
-								<li><a href="history.html"><i class="fa fa-star"></i> History</a></li>
-									<li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+							
+								<ul class="nav navbar-nav">
+								<li><a href="${pageContext.request.contextPath}/Home"/><i class="fa fa-user"></i>Home</a></li>
+								<li><a href="${pageContext.request.contextPath}/UserAccount"><i class="fa fa-star"></i>User Account</a></li>
+								<li><a href="${pageContext.request.contextPath}/History"><i class="fa fa-star"></i> History</a></li>
+								<li><a href="${pageContext.request.contextPath}/contactus"><i class="fa fa-star"></i> Contact</a></li>
+								<li><a href="${pageContext.request.contextPath}/Logout"><i class="fa fa-lock"></i>Logout</a></li>
 							</ul>
 						</div>
 					</div>
@@ -204,14 +225,7 @@
 								<span class="icon-bar"></span>
 							</button>
 						</div>
-						<div class="mainmenu pull-left">
-							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="index.html" class="active">Home</a></li>
-								
-							
-								<li><a href="contact-us.html">Contact</a></li>
-							</ul>
-						</div>
+						
 					</div>
 					
 				</div>
@@ -283,6 +297,8 @@
 		</div>
 	</section><!--/slider-->
 	
+	
+	<form class="form-vertical login-form" action="recommendation" method="GET">
 	<section>
 		<div class="container">
 			<div class="row">
@@ -304,64 +320,64 @@
 										
 	<div class="row">
   
-  <div class="col-lg-6">
+  <div class="col-lg-6" style="padding-right: 0px; padding-left: 5px;">
     <div class="input-group">
       <span class="input-group-addon">
-        <input type="radio">
+        <input type="radio" name="cuisine" value="American" required/>
       </span>
-      <input type="text" class="form-control" value ="American">
-    
+      <input type="text" class="form-control" value ="American">    
 	</div><!-- /input-group -->
-	  <div class="input-group">
+
+	<div class="input-group">
       <span class="input-group-addon">
-        <input type="radio">
+        <input type="radio" name="cuisine" value="Chinese" />
       </span>
       <input type="text" class="form-control" value ="Chinese">
-    
 	</div><!-- /input-group -->
-	  <div class="input-group">
-      <span class="input-group-addon">
-        <input type="radio">
-      </span>
-      <input type="text" class="form-control" value ="Greek">
+	
+	<div class="input-group">
+		<span class="input-group-addon">
+			<input type="radio" name="cuisine" value="Greek" />
+		</span>
+		<input type="text" class="form-control" value ="Greek">
+	</div><!-- /input-group -->
 	  
-	  </div><!-- /input-group -->
-	  <div class="input-group">
+	<div class="input-group">
       <span class="input-group-addon">
-        <input type="radio">
+        <input type="radio" name="cuisine" value="Mexican"/>
       </span>
       <input type="text" class="form-control" value ="Mexican">
-	  
-	  </div><!-- /input-group -->
-	  <div class="input-group">
+	</div><!-- /input-group -->
+	
+	<div class="input-group">
       <span class="input-group-addon">
-        <input type="radio">
+        <input type="radio" name="cuisine" value="Indian"/>
       </span>
       <input type="text" class="form-control" value ="Indian">
-	  
-	  </div><!-- /input-group -->
-	  <div class="input-group">
+	</div><!-- /input-group -->
+	
+	<div class="input-group">
       <span class="input-group-addon">
-        <input type="radio">
+        <input type="radio" name="cuisine" value="Italian"/>
       </span>
       <input type="text" class="form-control" value ="Italian">
-	  
-	  </div><!-- /input-group -->
-	  <div class="input-group">
+	</div><!-- /input-group -->
+	
+	<div class="input-group">
       <span class="input-group-addon">
-        <input type="radio">
+        <input type="radio" name="cuisine" value="Thai"/>
       </span>
       <input type="text" class="form-control" value ="Thai">
     </div><!-- /input-group -->
-	  <div class="input-group">
+	
+	<div class="input-group">
       <span class="input-group-addon">
-        <input type="radio">
+        <input type="radio" name="cuisine" value="Vietnamese"/>
       </span>
       <input type="text" class="form-control" value ="Vietnamese">
 	</div><!-- /input-group -->
   </div><!-- /.col-lg-6 -->
 </div><!-- /.row -->
-											
 										
 									</div>
 								</div>
@@ -373,12 +389,12 @@
 							<h2>NEAR</h2>
 							<div class="brands-name">
 								<ul class="nav nav-pills nav-stacked">
-<form class="navbar-form navbar-left" role="search">
-  <div class="form-group">
-    <input type="text" class="form-control" placeholder="City or Zip Code">
-  </div>
-
-</form>
+									<form class="navbar-form navbar-left" role="search">
+									  <div class="form-group">
+									    <input type="text" class="form-control" required="required" placeholder="City or Zip Code" id="zip" name="zip">
+									  </div>
+									
+									</form>
 								</ul>
 							</div>
 						</div><!--/brands_products-->
@@ -386,23 +402,37 @@
                         <br></br>
 						<div class="brands_products"><!--brands_products-->
 							<h2>MEAL TYPE</h2>
-							<div class="brands-name">
-								<ul class="nav nav-pills nav-stacked">
-						
+						<div class="brands-name">
+						<ul class="nav nav-pills nav-stacked">
 			
-			<div class="dropdown">
-  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-    Meal Type
-    <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Light</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Moderate</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Heavy</a></li>
 
-  </ul>
-</div>		
-						
+
+
+
+				<div class="row">
+					<div class="col-lg-6" style="padding-right: 0px; padding-left: 35px;">
+					   		<div class="input-group">
+					     		<span class="input-group-addon">
+					       			<input type="radio" name="mealType" value="Light" required/>
+					     		</span>
+					     		<input type="text" class="form-control" value ="Light">    
+							</div><!-- /input-group -->
+
+							<div class="input-group">
+							     <span class="input-group-addon">
+							       <input type="radio" name="mealType" value="Moderate"/>
+							     </span>
+							     <input type="text" class="form-control" value ="Moderate">
+							</div><!-- /input-group -->
+
+							<div class="input-group">
+								<span class="input-group-addon">
+									<input type="radio" name="mealType" value="Heavy"/>
+								</span>
+								<input type="text" class="form-control" value ="Heavy">
+							</div><!-- /input-group -->
+					</div><!-- /.col-lg-6 -->
+				</div><!-- /.row -->
 						
 								</ul>
 							</div>
@@ -412,11 +442,8 @@
 						<div class="brands_products"><!--time-->
 							<h2>DATE AND TIME</h2>
 							<div class="brands-name">
-								
-						
-						             &nbsp;&nbsp;<input class="form-control" style="width:210px" type="datetime-local" id="time" placeholder="date time" >
-                
-						
+								&nbsp;&nbsp;
+								<input class="form-control" style="width:210px" type="datetime-local" id="time" required="required" placeholder="date time" name="time">
 								</ul>
 							</div>
 						</div><!--time-->
@@ -427,19 +454,12 @@
 								 <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5" data-slider-value="[250,450]" id="sl2" ><br />
 								 <b class="pull-left">$ 0</b> <b class="pull-right">$ 600</b>
 							</div>
-						</div><!--/price-range-->
+						</div><!--/price-range-->		
 						
-						
-						
-						
-						
-						
-						
-						  <button type="submit" class="btn btn-default">Submit</button>
-						
-					
+						<input class="btn blue pull-right" required="required" value="Recommend Restaurants" type="submit">
 					</div>
 				</div>
+			</form>
 				
 			
 						<div class="col-sm-9 padding-right">
@@ -460,91 +480,84 @@
 					<br></br>
 					<br></br>
 					<div class="recommended_items"><!--recommended_items-->
-						<h2 class="title text-center">recommended items</h2>
+						<c:forEach var="q" items="${FoodRecommenList}" begin="0" end="0">
+						<h2 class="title text-center">Item Recommendation</h2>
+						</c:forEach>
+						
 						
 						<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
 							<div class="carousel-inner">
-								<div class="item active">	
+								<div class="item active">
+								<c:forEach var="q" items="${FoodRecommenList}" begin="0" end="2">
+								
 									<div class="col-sm-4">
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
-													<img src="images/home/recommend4.jpg" alt="" />
+													<img style="width:354px;height:288px" src="images/fooditems/${q.getRecoFoodID()}.jpg" alt="" />
 													
-													<p>House Of Siam</p>
-													<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Explore</a>
+													<p>${q.getRecoFoodName()}</p>
+													<a href="#" class="btn btn-default add-to-cart"></a>
 												</div>
 												
 											</div>
 										</div>
 									</div>
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo text-center">
-													<img src="images/home/recommend4.jpg" alt="" />
-													
-													<p>Sweet Tomatoes</p>
-													<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Explore</a>
-												</div>
-												
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo text-center">
-													<img src="images/home/recommend4.jpg" alt="" />
-													
-													<p>Inchin Bamboo</p>
-													<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Explore</a>
-												</div>
-												
-											</div>
-										</div>
-									</div>
+									</c:forEach>
 								</div>
 								<div class="item">	
+								<c:forEach var="q" items="${FoodRecommenList}" begin="3" end="5">
 									<div class="col-sm-4">
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
-													<img src="images/home/recommend4.jpg" alt="" />
+													<img style="width:304px;height:228px" src="images/fooditems/${q.getRecoFoodID()}.jpg" alt="" />
 													
-													<p>Chipotle</p>
-													<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Explore</a>
+													<p>${q.getRecoFoodName()}</p>
+													<a href="#" class="btn btn-default add-to-cart"></a>
 												</div>
 												
 											</div>
 										</div>
 									</div>
+									</c:forEach>
+									
+								</div>
+								
+								<div class="item">	
+								<c:forEach var="q" items="${FoodRecommenList}" begin="5" end="7">
 									<div class="col-sm-4">
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
-													<img src="images/home/recommend4.jpg" alt="" />
+													<img style="width:304px;height:228px" src="images/fooditems/${q.getRecoFoodID()}.jpg" alt="" />
 													
-													<p>P.F. Chang</p>
-													<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Explore</a>
+													<p>${q.getRecoFoodName()}</p>
+													<a href="#" class="btn btn-default add-to-cart"></a>
 												</div>
 												
 											</div>
 										</div>
 									</div>
+									</c:forEach>
+								</div>
+								
+								<div class="item">	
+								<c:forEach var="q" items="${FoodRecommenList}" begin="0" end="2">
 									<div class="col-sm-4">
 										<div class="product-image-wrapper">
 											<div class="single-products">
 												<div class="productinfo text-center">
-													<img src="images/home/recommend4.jpg" alt="" />
+													<img style="width:304px;height:228px" src="images/fooditems/${q.getRecoFoodID()}.jpg" alt="" />
 													
-													<p>Sakoon</p>
-													<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Explore</a>
+													<p>${q.getRecoFoodName()}</p>
+													<a href="#" class="btn btn-default add-to-cart"></a>
 												</div>
 												
 											</div>
 										</div>
 									</div>
+									</c:forEach>
 								</div>
 							</div>
 							 <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
@@ -554,6 +567,96 @@
 								<i class="fa fa-angle-right"></i>
 							  </a>			
 						</div>
+						
+					</div><!--/recommended_items-->
+					
+					
+					<div class="recommended_items"><!--recommended_items-->
+						<h2 class="title text-center">User Recommendation</h2>
+						
+						
+						<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+							<div class="carousel-inner">
+								<div class="item active">
+								<c:forEach var="q" items="${UsrRecoCuisinesLst}" begin="0" end="2">	
+									
+									<div class="col-sm-4">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<img style="width:354px;height:288px" src="images/cuisines/${q.getRecommendCuisine()}.jpg" alt="" />
+													
+													<p>${q.getRecommendPlace()}</p>
+													<a href="#" class="btn btn-default add-to-cart"></a>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+									</c:forEach>
+								</div>
+								<div class="item">	
+								<c:forEach var="q" items="${UsrRecoCuisinesLst}" begin="3" end= "5">
+									<div class="col-sm-4">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<img style="width:304px;height:228px" src="images/cuisines/${q.getRecommendCuisine()}.jpg" alt="" />
+													
+													<p>${q.getRecommendPlace()}</p>
+													<a href="#" class="btn btn-default add-to-cart"></a>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+									</c:forEach>
+									</div>
+									
+									<div class="item">	
+									<c:forEach var="q" items="${UsrRecoCuisinesLst}" begin="6" end= "8">
+									<div class="col-sm-4">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<img style="width:304px;height:228px" src="images/cuisines/${q.getRecommendCuisine()}.jpg" alt="" />
+													
+													<p>${q.getRecommendPlace()}</p>
+													<a href="#" class="btn btn-default add-to-cart"></a>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+									</c:forEach>
+									</div>
+									
+									<div class="item">
+									<c:forEach var="q" items="${UsrRecoCuisinesLst}" begin="0" end= "2">
+									<div class="col-sm-4">
+										<div class="product-image-wrapper">
+											<div class="single-products">
+												<div class="productinfo text-center">
+													<img style="width:304px;height:228px" src="images/cuisines/${q.getRecommendCuisine()}.jpg" alt="" />
+													
+													<p>${q.getRecommendPlace()}</p>
+													<a href="#" class="btn btn-default add-to-cart"></a>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+									</c:forEach>
+									</div>		
+							</div>
+							 <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+								<i class="fa fa-angle-left"></i>
+							  </a>
+							  <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+								<i class="fa fa-angle-right"></i>
+							  </a>			
+						</div>
+						
 					</div><!--/recommended_items-->
 					
 				</div>
@@ -648,8 +751,7 @@
 		<div class="footer-bottom">
 			<div class="container">
 				<div class="row">
-					<p class="pull-left">Copyright © 2014 HealthyBites Inc. All rights reserved.</p>
-					<p class="pull-right">Designed by <span><a target="_blank" href="#">Ankur & Simrita</a></span></p>
+					<p class="pull-left">Copyright ï¿½ 2014 HealthyBites Inc. All rights reserved.</p>
 				</div>
 			</div>
 		</div>

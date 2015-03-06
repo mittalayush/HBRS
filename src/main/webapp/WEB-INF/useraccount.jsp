@@ -19,12 +19,6 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-	
-	
-	
-	 
-	
-</head><!--/head-->
 
 <body>
 	<header id="header"><!--header-->
@@ -52,7 +46,7 @@
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="logo pull-left">
-							<a href="index.html"><img src="images/home/logo.jpg" alt="" /></a>
+							<a href="${pageContext.request.contextPath}/Home"><img src="images/home/logo.jpg" alt="" /></a>
 						</div>
 						<div class="btn-group pull-right">
 							
@@ -61,9 +55,12 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="useraccount.html"><i class="fa fa-user"></i>User Account</a></li>
-								<li><a href="history.html"><i class="fa fa-star"></i> History</a></li>
-									<li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+								<li><a href="${pageContext.request.contextPath}/Home"/><i class="fa fa-user"></i>Home</a></li>
+								<li><a href="#"><i class="fa fa-star"></i>User Account</a></li>
+								<li><a href="${pageContext.request.contextPath}/History"><i class="fa fa-star"></i> History</a></li>
+								<li><a href="${pageContext.request.contextPath}/contactus"><i class="fa fa-star"></i> Contact</a></li>
+								<li><a href="${pageContext.request.contextPath}/Logout"><i class="fa fa-lock"></i>Logout</a></li>
+						
 							</ul>
 						</div>
 					</div>
@@ -83,59 +80,175 @@
 								<span class="icon-bar"></span>
 							</button>
 						</div>
-						<div class="mainmenu pull-left">
-							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="index.html" class="active">Home</a></li>
-								 
-								
-							
-								<li><a href="contact-us.html">Contact</a></li>
-							</ul>
-						</div>
+						
 					</div>
 					
 				</div>
 			</div>
 		</div><!--/header-bottom-->
 	</header><!--/header-->
-	
+
+	<script>
+	function diabeticDefVal(valueToSelect)
+	{  document.getElementById('diabetic').value=valueToSelect;}
+	function heartDiseaseDefVal(valueToSelect)
+	{  document.getElementById('heartdisease').value=valueToSelect;}
+	function dailyExcerDefVal(valueToSelect)
+	{  //alert(valueToSelect);
+		document.getElementById('physicalexercise').value=valueToSelect;}
+	function phyActivityDefVal(valueToSelect)
+	{  //alert(valueToSelect);
+		document.getElementById('lifestyle').value=valueToSelect;}
+	</script>
 		
-	<section>
+   <section>
 	
 	<div class="brands_products"><!--brands_products-->
 							<h2>Edit User Profile</h2>
 							<div class="brands-name">
 								<ul class="nav nav-pills nav-stacked">
-									<form class="navbar-form navbar-center" role="search">
-										<div class="form-group">
-											<input type="text"  class="form-control" placeholder="Edit Name">
-										</div>
-										<br></br>
-										<div class="form-group">
-											<input type="text"  class="form-control" placeholder="Edit Email">
-										</div>
-										<br></br>
-										<div class="form-group">
-											<input type="text"  class="form-control" placeholder="Edit Address">
-										</div>
-										<br></br>
-										<div class="form-group">
-											<input type="text"  class="form-control" placeholder="Edit Age">
-										</div>
-										<br></br>
-										<div class="form-group">
-											<input type="text"  class="form-control" placeholder="Edit Weight">
-										</div>
-										<br></br>
-										<div class="form-group">
-											<input type="text"  class="form-control" placeholder="Edit Height">
-										</div>
-										<br></br>
-						  <button type="submit" class="btn btn-default">Update</button>
+										
+						  
+						  
+				<form action="save" method="GET">
+                    <div class="col-sm-5 col-sm-offset-3">
+						<div class="form-group">
+                            <label>User Name:</label><br/>
+                            <div class="input-group">
+                            <p class="form-control">${Customer.username}</p>
+                            <span class="input-group-addon"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Full Name:</label><br/>
+                            <div class="input-group">
+                            <p class="form-control">${Customer.fullname}</p>
+                            <span class="input-group-addon"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Address:</label><br/>
+                            <div class="input-group">
+                            <p class="form-control">${Customer.address}</p>
+                            <span class="input-group-addon"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>City:</label><br/>
+                            <div class="input-group">
+                            <p class="form-control">${Customer.city}</p>
+                            <span class="input-group-addon"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Zipcode:</label><br/>
+                            <div class="input-group">
+                            <p class="form-control">${Customer.zipCode}</p>
+                            <span class="input-group-addon"></span>
+                            </div>
+                        </div><br><br><br>
+                    	
+                        <div class="form-group">
+                            <label>Weight:</label><br/>
+                            <div class="input-group">
+                            <input type="text" id="weight" name="weight" value="${weight}"  class="form-control" placeholder="Edit Weight" style="border:2px solid #0000FF;">
+                            <span class="input-group-addon"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Height:</label>
+                            <div class="input-group">
+                            <input type="text" id="height" name="height" value="${height}" height class="form-control" required="required" placeholder="Edit Height" style="border:2px solid #0000FF;">
+                            <span class="input-group-addon"></span>
+                            </div>
+                        </div>
+						<div class="form-group">
+						<label>Physical Exercise:</label>
+						<select name="physicalexercise" id="physicalexercise" size="0" style="border:2px solid #0000FF";> 
+						<option value="1">Regularly </option> 
+						<option value="2">Rarely</option>
+						<option value="3">Never</option> 
+
+						</select>
+
+						</div>
+						
+						<div class="form-group">
+						<label>Lifestyle:</label>
+						<select name="lifestyle" id="lifestyle" size="0" style="border:2px solid #0000FF";> 
+						<option value="1">Active</option> 
+						<option value="2">Moderate</option>
+						<option value="3">Sedentary</option> 
+
+						</select>
+
+						</div>
+
+							<div class="form-group">
+                            <label>Blood Pressure Systolic:</label>
+                            <div class="input-group">
+                            <input type="text" id="bloodpressuresystolic" name="bloodpressuresystolic"  value="${bp_sys}" class="form-control"  required="required" placeholder="Edit Blood Pressure (Value)" style="border:2px solid #0000FF;">
+                            <span class="input-group-addon"></span>
+                            </div>
+                        </div>
+						
+						
+						
+						
+							<div class="form-group">
+                            <label>Blood Diastolic:</label>
+                            <div class="input-group">
+                            <input type="text" id="bloodpressurediastolic" name="bloodpressurediastolic" value="${bp_dia}" class="form-control"  required="required" placeholder="Edit Blood Pressure (Value)" style="border:2px solid #0000FF;">
+                            <span class="input-group-addon"></span>
+                            </div>
+                        </div>
+
+						
+						
+							<div class="form-group">
+                            <label>Cholesterol:</label>
+                            <div class="input-group">
+                            <input type="text" id="cholesterol" name="cholesterol" value="${bp_dia}" class="form-control"  required="required" placeholder="Cholesterol (Value)" style="border:2px solid #0000FF;">
+                            <span class="input-group-addon"></span>
+                            </div>
+                        </div>
+						
+						<div class="form-group">
+						<label>Diabetic:</label>
+						<select name="diabetic" id="diabetic" name="diabetic" size="0" style="border:2px solid #0000FF";> 
+						<option value="0">Yes</option> 
+						<option value="1">No</option>
+						</select>
+						</div>
+						
+						
+						<div class="form-group">
+						<label>Heart Disease:</label>
+						<select name="heartdisease" id="heartdisease" size="0" style="border:2px solid #0000FF";> 
+						<option value="0">Yes</option> 
+						<option value="1">No</option>
+						</select>
+						</div>
+                        <div align="center">
+                            <button type="submit" class="btn btn-primary btn-lg" required="required">Update</button>
+                            <br/><br/><br/><br/>
+                        </div>                       
+                    </div>
+                </form> 
+
 						
 		</div>								
-	</section>
-												
+	</section>	
+	<script>
+	diabeticDefVal("${diabetic}")
+	heartDiseaseDefVal("${heart_patient}")
+	dailyExcerDefVal("${daily_exrcse}")
+	phyActivityDefVal("${phys_activity}")
+	</script>											
 	<footer id="footer"><!--Footer-->
 		<div class="footer-top">
 			<div class="container">

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -52,7 +53,7 @@
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="logo pull-left">
-							<a href="index.html"><img src="images/home/logo.jpg" alt="" /></a>
+							<a href="${pageContext.request.contextPath}/Home"><img src="images/home/logo.jpg" alt="" /></a>
 						</div>
 						<div class="btn-group pull-right">
 							
@@ -61,9 +62,11 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="useraccount.html"><i class="fa fa-user"></i>User Account</a></li>
-								<li><a href="history.html"><i class="fa fa-star"></i> History</a></li>
-									<li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+								<li><a href="${pageContext.request.contextPath}/Home"/><i class="fa fa-user"></i>Home</a></li>
+								<li><a href="${pageContext.request.contextPath}/UserAccount"><i class="fa fa-star"></i>User Account</a></li>
+								<li><a href="#"><i class="fa fa-star"></i> History</a></li>
+								<li><a href="${pageContext.request.contextPath}/contactus"><i class="fa fa-star"></i> Contact</a></li>
+								<li><a href="${pageContext.request.contextPath}/Logout"><i class="fa fa-lock"></i>Logout</a></li>
 							</ul>
 						</div>
 					</div>
@@ -83,17 +86,8 @@
 								<span class="icon-bar"></span>
 							</button>
 						</div>
-						<div class="mainmenu pull-left">
-							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="index.html" class="active">Home</a></li>
-								 
-								
-							
-								<li><a href="contact-us.html">Contact</a></li>
-							</ul>
-						</div>
+						
 					</div>
-					
 				</div>
 			</div>
 		</div><!--/header-bottom-->
@@ -104,9 +98,28 @@
 	
 	<div class="brands_products"><!--brands_products-->
 							<h2>User History</h2>
-							
-						
-		</div>								
+	
+	<!-- USER HISTORY TABLE -->
+		<table class="TFtable" border="1" cellpadding="1" cellspacing="1" height="125" width="600" align="center">
+		
+			<tr>
+				<th><B>Time</B></th>
+				<th><B>Place</B></th>
+				<th><B>Cuisine</B></th>
+				<th><B>Food Item</B></th>
+				<th><B>Rating</B></th>
+			</tr>
+			<c:forEach var="q" items="${historyList}">
+				<tr>
+					<td>${q.getRecoTime()}</td>
+					<td>${q.getRecoPlace()}</td>
+					<td>${q.getRecoCuisine()}</td>
+					<td>${q.getRecoFoodItem()}</td>
+					<td>${q.getRecoRating()}</td>
+				</tr>
+			</c:forEach>
+		</table>
+	</div>								
 	</section>
 												
 	<footer id="footer"><!--Footer-->

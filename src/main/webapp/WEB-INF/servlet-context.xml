@@ -27,7 +27,7 @@
   
   
   <!-- Scan classpath for annotations (eg: @Service, @Repository etc) -->
-  <context:component-scan base-package="com.cmpe239.healthybites"/>
+  <context:component-scan base-package="com.cmpe295B.healthybites"/>
   
   
   <!-- JDBC Data Source. It is assumed you have MySQL running on localhost port 3306 with 
@@ -45,7 +45,7 @@
     <property name="dataSource" ref="myDataSource"/>
     <property name="packagesToScan">
       <array>
-        <value>com.cmpe239.healthybites</value>
+        <value>com.cmpe295B.healthybites</value>
       </array>
     </property>
     <property name="hibernateProperties">
